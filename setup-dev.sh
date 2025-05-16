@@ -1,34 +1,26 @@
 #!/bin/bash
 
-# Define variables
-ROOT_DIR="PickLe-Time"
+# List of repos to clone
 REPOS=("pickletime-frontend" "pickletime-backend")
 ORG="PickLe-Time"
 
-# Create the root directory in the current location
-mkdir -p "$ROOT_DIR"
+# Get directory of this script (infra repo)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Clone each repo into the root directory
+# Parent directory of infra repo (where to clone other repos)
+PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+
+echo "Infra repo is in: $SCRIPT_DIR"
+echo "Cloning repos into: $PARENT_DIR"
+
+# Clone repos if not already present
 for repo in "${REPOS[@]}"; do
-  if [ ! -d "$ROOT_DIR/$repo" ]; then
-    echo "Cloning $repo into $ROOT_DIR..."
-    git clone "https://github.com/$ORG/$repo.git" "$ROOT_DIR/$repo"
+  if [ ! -d "$PARENT_DIR/$repo" ]; then
+    echo "Cloning $repo into $PARENT_DIR..."
+    git clone "https://github.com/$ORG/$repo.git" "$PARENT_DIR/$repo"
   else
-    echo "$repo already exists in $ROOT_DIR, skipping clone."
+    echo "$repo already exists in $PARENT_DIR, skipping clone."
   fi
 done
 
-# Move the infra repo (this script's parent) into the root directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INFRA_DIR="$(dirname "$SCRIPT_DIR")"
-CURRENT_DIR="$(pwd)"
-
-# Only move if we're not already inside $ROOT_DIR
-if [[ "$INFRA_DIR" != *"$ROOT_DIR"* ]]; then
-  echo "Moving infra repo into $ROOT_DIR..."
-  mv "$INFRA_DIR" "$CURRENT_DIR/$ROOT_DIR/"
-else
-  echo "Infra repo is already inside $ROOT_DIR."
-fi
-
-echo "✅ Development environment is set up in $ROOT_DIR."
+echo "✅ Done cloning repos."
