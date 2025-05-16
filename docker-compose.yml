@@ -3,32 +3,33 @@ services:
     image: ghcr.io/krisvan/pickleball-scheduler/frontend:latest
     container_name: frontend
     build:
-      context: .
-      dockerfile: DockerFile
+      context: ../pickletime-frontend
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
     env_file:
-     - .env
+      - ../pickletime-frontend/.env
     command: ["npm", "run", "preview"]
 
   backend:
     image: ghcr.io/krisvan/pickleball-scheduler/backend:latest
     container_name: backend
     build:
-      context: .
-      dockerfile: DockerFile
+      context: ../pickletime-backend
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     env_file:
-      - .env
+      - ../pickletime-backend/.env
     depends_on:
       - postgres
     command: ["npm", "run", "start"]
+
   postgres:
     image: postgres:15
     container_name: postgres-db
     env_file:
-      - .env
+      - ../pickletime-backend/.env
     ports:
       - "5432:5432"
     volumes:
