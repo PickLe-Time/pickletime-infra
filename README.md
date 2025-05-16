@@ -2,7 +2,10 @@
 
 
 ## Set up development environment locally
-Make sure you have [Node.js](http://nodejs.org/).
+Make sure you have:
+* [Node.js](http://nodejs.org/)
+* [Docker](https://docs.docker.com/engine/)
+
 Follow these steps to get PickLeTime up and running on your local machine:
 
 1. Create root directory
