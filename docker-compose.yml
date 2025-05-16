@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: ghcr.io/krisvan/pickleball-scheduler/frontend:latest
+    image: ghcr.io/pickle-time/pickletime-frontend:latest
     container_name: frontend
     build:
       context: ../pickletime-frontend
@@ -12,7 +12,7 @@ services:
     command: ["npm", "run", "preview"]
 
   backend:
-    image: ghcr.io/krisvan/pickleball-scheduler/backend:latest
+    image: ghcr.io/pickle-time/pickletime-backend:latest
     container_name: backend
     build:
       context: ../pickletime-backend

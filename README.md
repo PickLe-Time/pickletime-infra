@@ -31,6 +31,9 @@ npx prisma generate
 npx prisma migrate dev --name init
 ```
 7. Run Postgres container from docker-compose.yml
+```
+docker compose up -d postgres
+```
 8. Start the app in each repo
 ```
 npm run start
