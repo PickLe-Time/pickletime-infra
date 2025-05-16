@@ -23,7 +23,7 @@ services:
       - ../pickletime-backend/.env
     depends_on:
       - postgres
-    command: ["npm", "run", "start"]
+    command: [ "sh", "-c", "npx prisma migrate dev && npm run seed && npm run start" ]
 
   postgres:
     image: postgres:15
