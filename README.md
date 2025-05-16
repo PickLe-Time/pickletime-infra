@@ -1,7 +1,7 @@
 # PickLeTime Infra
 
 
-## Set up development enviornment locally
+## Set up development environment locally
 Make sure you have [Node.js](http://nodejs.org/).
 Follow these steps to get PickLeTime up and running on your local machine:
 
