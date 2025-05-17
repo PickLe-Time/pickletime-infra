@@ -25,21 +25,12 @@ services:
       - postgres
     command: [ "sh", "-c", "npx prisma migrate dev && npm run seed && npm run start" ]
 
-  certbot: # Runs once to generate the SSL certificate
+  certbot: # Runs once to generate the SSL certificate, then switch conf
     image: certbot/certbot
     container_name: certbot
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: [
-      "certonly", "--webroot",
-      "--webroot-path=/var/www/certbot",
-      "--email", "kristophervan1999@gmail.com",
-      "--agree-tos",
-      "--no-eff-email",
-      "--staging", # Remove this line for production
-      "-d", "pickletime.duckdns.org"
-    ]
   nginx:
     image: nginx:latest
     container_name: nginx
