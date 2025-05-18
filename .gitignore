@@ -8,10 +8,7 @@
 *.csr
 *.key
 *.crt
-certbot/conf/accounts/
-certbot/conf/renewal/
-certbot/conf/renewal-hooks/
-certbot/conf/*.json
+certbot/conf/
 certbot/www/
 
 # Certbot log files
