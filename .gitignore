@@ -1,0 +1,19 @@
+# Let's Encrypt config and live certificates
+/etc/letsencrypt/
+**/letsencrypt/
+/var/lib/letsencrypt/
+**/lib/letsencrypt/
+**/log/letsencrypt/
+*.pem
+*.csr
+*.key
+*.crt
+certbot/conf/
+certbot/www/
+
+# Certbot log files
+*.log
+
+# Docker volume mounts (optional depending on setup)
+certs/
+webroot/

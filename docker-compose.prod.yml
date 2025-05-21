@@ -1,0 +1,61 @@
+# Production Docker Compose file for PickleTime. Pulls images from GitHub
+# Container Registry and uses .env files from the backend and frontend directories.
+services:
+  frontend:
+    image: ghcr.io/pickle-time/pickletime-frontend:latest
+    container_name: frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - ../pickletime-frontend/.env
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+
+  backend:
+    image: ghcr.io/pickle-time/pickletime-backend:latest
+    container_name: backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ../pickletime-backend/.env
+    depends_on:
+      - postgres
+    command: [ "sh", "-c", "npx prisma migrate dev && npm run seed && npm run start" ]
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  # Runs once and run command to generate the SSL certificate, then stop nginx and comment out nginx service
+  # docker run --rm -v "$(pwd)/certbot/www:/var/www/certbot" -v "$(pwd)/certbot/conf:/etc/letsencrypt" certbot/certbot certonly --webroot --webroot-path=/var/www/certbot --email kristophervan1999@gmail.com --agree-tos --no-eff-email -d pickletime.duckdns.org
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #     - ./certbot/www:/var/www/certbot
+  #     - ./certbot/conf:/etc/letsencrypt
+  #   depends_on:
+  #     - certbot
+
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    env_file:
+      - ../pickletime-backend/.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
