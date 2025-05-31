@@ -4,10 +4,7 @@ services:
   frontend-extract:
     image: ghcr.io/pickle-time/pickletime-frontend:latest
     container_name: frontend
-    env_file:
-      - ../pickletime-frontend/.env
     volumes:
-      # - frontend_build:/app/dist
       - frontend_build:/usr/share/nginx/html
     command: >
       sh -c "rm -rf /usr/share/nginx/html/* && cp -r /app/dist/* /usr/share/nginx/html"
