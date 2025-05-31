@@ -8,7 +8,6 @@ services:
       - ../pickletime-frontend/.env
     volumes:
       - frontend_build:/app/dist
-    # command: ["sleep", "infinity"] # optionally keep the container running
 
   backend:
     image: ghcr.io/pickle-time/pickletime-backend:latest
