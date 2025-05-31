@@ -1,22 +1,30 @@
 # Production Docker Compose file for PickleTime. Pulls images from GitHub
 # Container Registry and uses .env files from the backend and frontend directories.
 services:
+  # frontend:
+  #   image: ghcr.io/pickle-time/pickletime-frontend:latest
+  #   container_name: frontend
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   env_file:
+  #     - ../pickletime-frontend/.env
+  #   volumes:
+  #     - ./certbot/www:/var/www/certbot
+  #     - ./certbot/conf:/etc/letsencrypt
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "5m"
+  #       max-file: "3"
   frontend:
     image: ghcr.io/pickle-time/pickletime-frontend:latest
     container_name: frontend
-    ports:
-      - "80:80"
-      - "443:443"
     env_file:
       - ../pickletime-frontend/.env
     volumes:
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "3"
+      - frontend_build:/app/dist
+    command: ["sleep", "infinity"] # optionally keep the container running
 
   backend:
     image: ghcr.io/pickle-time/pickletime-backend:latest
@@ -33,6 +41,26 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+      - frontend_build:/usr/share/nginx/html
+    depends_on:
+      - frontend
+      - backend
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
 
   certbot:
     image: certbot/certbot
