@@ -24,7 +24,7 @@ services:
       - ../pickletime-frontend/.env
     volumes:
       - frontend_build:/app/dist
-    command: ["sleep", "infinity"] # optionally keep the container running
+    # command: ["sleep", "infinity"] # optionally keep the container running
 
   backend:
     image: ghcr.io/pickle-time/pickletime-backend:latest
@@ -91,6 +91,7 @@ services:
         max-file: "3"
 
 volumes:
+  frontend_build:
   postgres_data:
 
   # Run once and run command to generate the SSL certificate, then stop nginx and comment out nginx service
