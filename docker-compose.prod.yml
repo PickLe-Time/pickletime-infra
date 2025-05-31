@@ -1,22 +1,6 @@
 # Production Docker Compose file for PickleTime. Pulls images from GitHub
 # Container Registry and uses .env files from the backend and frontend directories.
 services:
-  # frontend:
-  #   image: ghcr.io/pickle-time/pickletime-frontend:latest
-  #   container_name: frontend
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   env_file:
-  #     - ../pickletime-frontend/.env
-  #   volumes:
-  #     - ./certbot/www:/var/www/certbot
-  #     - ./certbot/conf:/etc/letsencrypt
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "5m"
-  #       max-file: "3"
   frontend:
     image: ghcr.io/pickle-time/pickletime-frontend:latest
     container_name: frontend
