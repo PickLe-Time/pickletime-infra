@@ -25,12 +25,28 @@ scrape_configs:
         target_label: compose_service
     pipeline_stages:
       - docker: {}
-      - json:
-          expressions:
-            level: level
-            msg: message
-      - labels:
-          level: level
+      - match:
+          selector: '{container_name="backend"}'
+          stages:
+            - json:
+                expressions:
+                  level: level
+                  ts: time
+                  statusCode: res.statusCode
+                  method: req.method
+                  url: req.url
+                  hostname: req.hostname
+                  reqId: reqId
+                  responseTime: responseTime
+                  msg: msg
+                  remoteAddress: remoteAddress
+                  
+            - timestamp:
+                source: ts
+                format: UnixMillis
+            - labels:
+                level:
+                method:
 
   - job_name: system
     static_configs:
