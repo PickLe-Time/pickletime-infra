@@ -3,20 +3,25 @@ auth_enabled: false
 server:
   http_listen_port: 3100
   grpc_listen_port: 9096
-  log_level: debug
   grpc_server_max_concurrent_streams: 1000
 
 common:
-  instance_addr: 127.0.0.1
-  path_prefix: /tmp/loki
+  path_prefix: /loki
   storage:
     filesystem:
-      chunks_directory: /tmp/loki/chunks
-      rules_directory: /tmp/loki/rules
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
   replication_factor: 1 
   ring:
     kvstore:
       store: inmemory
+
+compactor:
+  working_directory: /loki/compactor
+  shared_store: filesystem
+  retention_enabled: true
+  retention_delete_delay: 2h
+  retention_delete_worker_count: 5
 
 query_range:
   results_cache:
@@ -26,28 +31,33 @@ query_range:
         max_size_mb: 100
 
 limits_config:
+  enforce_metric_name: false
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+  max_cache_freshness_per_query: 10m
   metric_aggregation_enabled: true
 
 schema_config:
   configs:
-    - from: 2020-10-24
+    - from: 2025-06-01
       store: tsdb
       object_store: filesystem
       schema: v13
       index:
         prefix: index_
         period: 24h
-
-pattern_ingester:
-  enabled: true
-  metric_aggregation:
-    loki_address: localhost:3100
+      retention:
+        period: 168h  # 7 days
 
 ruler:
   alertmanager_url: http://localhost:9093
-
-frontend:
-  encoding: protobuf
+  storage:
+    type: local
+    local:
+      directory: /loki/rules
+  rule_path: /loki/rules-temp
+  enable_api: true
+  enable_alertmanager_v2: true
 
 analytics:
  reporting_enabled: false

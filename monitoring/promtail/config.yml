@@ -40,7 +40,6 @@ scrape_configs:
                   responseTime: responseTime
                   msg: msg
                   remoteAddress: remoteAddress
-                  
             - timestamp:
                 source: ts
                 format: UnixMillis
