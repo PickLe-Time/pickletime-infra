@@ -1,6 +1,3 @@
-# To view promtail readiness, navigate to http://localhost:3100/ready.
-# To view promtail metrics, navigate to http://localhost:3100/metrics.
-
 services:
   loki:
     image: grafana/loki:latest
