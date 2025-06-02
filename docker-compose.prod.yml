@@ -12,8 +12,6 @@ services:
     command: >
       sh -c "rm -rf /usr/share/nginx/html/* && cp -r /app/dist/* /usr/share/nginx/html"
     restart: "no"
-    networks:
-      - public
 
   backend:
     image: ghcr.io/pickle-time/pickletime-backend:latest

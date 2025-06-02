@@ -44,12 +44,15 @@ services:
     ports:
       - "3000:3000"
     networks:
+      - public
       - monitoring
 volumes:
   grafana_data:
   loki_data:
 
 networks:
+  public:
+    external: true
   internal:
     external: true
   monitoring:
