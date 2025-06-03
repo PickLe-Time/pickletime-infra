@@ -33,21 +33,6 @@ services:
       - ./certbot/conf:/etc/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
-  # Runs once and run command to generate the SSL certificate, then stop nginx and comment out nginx service
-  # docker run --rm -v "$(pwd)/certbot/www:/var/www/certbot" -v "$(pwd)/certbot/conf:/etc/letsencrypt" certbot/certbot certonly --webroot --webroot-path=/var/www/certbot --email kristophervan1999@gmail.com --agree-tos --no-eff-email -d pickletime.duckdns.org
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: nginx
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx/conf.d:/etc/nginx/conf.d
-  #     - ./certbot/www:/var/www/certbot
-  #     - ./certbot/conf:/etc/letsencrypt
-  #   depends_on:
-  #     - certbot
-
   postgres:
     image: postgres:15
     container_name: postgres-db
