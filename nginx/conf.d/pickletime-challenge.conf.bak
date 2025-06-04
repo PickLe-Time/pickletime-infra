@@ -8,6 +8,7 @@
 server {
     listen 80;
     server_name pickletime.duckdns.org;
+    # server_name pickletime-grafana.duckdns.org;
 
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;

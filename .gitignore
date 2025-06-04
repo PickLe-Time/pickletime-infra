@@ -8,6 +8,7 @@
 *.csr
 *.key
 *.crt
+*.env
 certbot/conf/
 certbot/www/
 

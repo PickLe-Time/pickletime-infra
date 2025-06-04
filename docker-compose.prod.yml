@@ -1,5 +1,8 @@
 # Production Docker Compose file for PickleTime. Pulls images from GitHub
 # Container Registry and uses .env files from the backend and frontend directories.
+# docker network create public
+# docker network create internal
+# docker network create monitoring
 services:
   frontend-extract:
     image: ghcr.io/pickle-time/pickletime-frontend:latest
@@ -20,6 +23,9 @@ services:
     depends_on:
       - postgres
     command: [ "sh", "-c", "npx prisma migrate dev && npm run seed && npm run start" ]
+    networks:
+      - public
+      - internal
     logging:
       driver: "json-file"
       options:
@@ -40,6 +46,8 @@ services:
     depends_on:
       - frontend-extract
       - backend
+    networks:
+      - public
     logging:
       driver: "json-file"
       options:
@@ -53,6 +61,8 @@ services:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - public
     logging:
       driver: "json-file"
       options:
@@ -68,27 +78,22 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
     logging:
       driver: "json-file"
       options:
         max-size: "2m"
         max-file: "3"
 
+networks:
+  public:
+  internal:
+    external: true
+  monitoring:
+    external: true
+
 volumes:
   frontend_build:
   postgres_data:
 
-  # Run once and run command to generate the SSL certificate, then stop nginx and comment out nginx service
-  # docker run --rm -v "$(pwd)/certbot/www:/var/www/certbot" -v "$(pwd)/certbot/conf:/etc/letsencrypt" certbot/certbot certonly --webroot --webroot-path=/var/www/certbot --email kristophervan1999@gmail.com --agree-tos --no-eff-email -d pickletime.duckdns.org
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: nginx
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx/conf.d:/etc/nginx/conf.d
-  #     - ./certbot/www:/var/www/certbot
-  #     - ./certbot/conf:/etc/letsencrypt
-  #   depends_on:
-  #     - certbot
