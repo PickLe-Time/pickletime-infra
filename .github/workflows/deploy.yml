@@ -26,3 +26,6 @@ jobs:
             docker network create monitoring || true
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
+            cd /monitoring
+            docker compose -f docker-compose.monitoring.yml pull
+            docker compose -f docker-compose.monitoring.yml up -d --remove-orphans
