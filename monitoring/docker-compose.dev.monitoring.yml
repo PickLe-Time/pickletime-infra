@@ -39,8 +39,8 @@ services:
       - ./grafana/dashboards:/etc/grafana/dashboards:ro
     env_file:
       - ../.env
-    ports:
-      - "3000:3000"
+    # ports:
+      # - "3000:3000"
     networks:
       - public
       - monitoring
