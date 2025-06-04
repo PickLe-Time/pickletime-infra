@@ -19,13 +19,14 @@ jobs:
           script: |
             cd /home/opc/projects/pickletime/pickletime-infra
             git pull origin main
-
             # Ensure required Docker networks exist
             docker network create public || true
             docker network create internal || true
             docker network create monitoring || true
+            # Ensure the services are up to date
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d --remove-orphans
-            cd /monitoring
+            # Ensure monitoring services are up to date
+            cd monitoring
             docker compose -f docker-compose.monitoring.yml pull
             docker compose -f docker-compose.monitoring.yml up -d --remove-orphans
