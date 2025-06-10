@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 4,
   "links": [],
   "panels": [
     {
@@ -75,9 +75,34 @@
               }
             ]
           },
-          "unit": "reqps"
+          "unit": "reqpm"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Value"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -89,7 +114,10 @@
       "interval": "1m",
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "max",
+            "mean"
+          ],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
@@ -103,7 +131,7 @@
       "pluginVersion": "12.0.1",
       "targets": [
         {
-          "expr": "sum by (method) (rate({container_name=\"backend\"} |= \"incoming request\"[1m]))",
+          "expr": "sum by (method) (rate({container_name=\"backend\"} |= \"incoming request\"[1m])) * 60",
           "legendFormat": "{{method}}",
           "refId": "A"
         }
@@ -115,11 +143,7 @@
   "preload": false,
   "refresh": "30s",
   "schemaVersion": 41,
-  "tags": [
-    "backend",
-    "requests",
-    "loki"
-  ],
+  "tags": [],
   "templating": {
     "list": []
   },
@@ -129,7 +153,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Backend Requests",
-  "uid": "bed8a4c7-fcfa-4ac8-b45f-24a0fbfa6f49",
-  "version": 1
+  "title": "Reuests Per Minute",
+  "uid": "edf1691e-e863-4742-8c11-951c2caf016e",
+  "version": 7
 }
