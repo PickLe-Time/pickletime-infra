@@ -45,6 +45,7 @@ scrape_configs:
                 format: UnixMillis
             - labels:
                 level:
+                statusCode:
                 method:
 
   - job_name: system
