@@ -42,7 +42,8 @@ scrape_configs:
                   remoteAddress: remoteAddress
             - timestamp:
                 source: ts
-                format: UnixMillis
+                format: UnixMS
+                fallback_to_now: true
             - labels:
                 level:
                 method:
