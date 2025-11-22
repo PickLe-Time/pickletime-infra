@@ -14,6 +14,11 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - monitoring
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
 
   promtail:
     container_name: promtail
@@ -28,6 +33,11 @@ services:
     networks:
       - monitoring
       - internal
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
 
   grafana:
     container_name: grafana
@@ -44,6 +54,12 @@ services:
     networks:
       - public
       - monitoring
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+
 volumes:
   grafana_data:
   loki_data:
